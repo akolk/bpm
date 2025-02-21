@@ -18,12 +18,15 @@ def transcribe_audio(file_path):
     except sr.RequestError:
         return "Error in request to speech recognition API."
 
+client = openai.OpenAI()
+
 def generate_bpmn(text):
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-4",
         messages=[{"role": "user", "content": f"Create a BPMN XML for the following process: {text}"}]
     )
-    return response['choices'][0]['message']['content']
+    return response.choices[0].message.content
+
 
 st.title("BPM Generator Chatbot")
 st.write("Speak, upload an audio file, or type a process description to generate a BPMN file.")
