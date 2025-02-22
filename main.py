@@ -67,9 +67,9 @@ Geef een JSON structuur terug met de volgende velden:
 {
     "diagram.xml": "De visualisatie van het process in XML.",
     "annotatie.md": "De BPMN annotatie van het process.",
-    "proces_beschrijving.md": "De formele beschrijving van het proces'"
+    "proces_beschrijving.md": "De formele beschrijving van het proces."
 }
-                  """
+                  """}
                  ]
     )
     files_data = response.choices[0].message.content
