@@ -1,7 +1,7 @@
 # Use official Python base image
 FROM python:3.13
 
-RUN apt-get -y install portaudio19-dev python3-pyaudio
+RUN apt-get install -y portaudio19-dev python3-pyaudio
 # Set the working directory
 WORKDIR /app
 
