@@ -12,6 +12,8 @@ from streamlit_webrtc import webrtc_streamer
 import speech_recognition as sr
 import openai  # If using OpenAI's GPT model for chatbot
 
+
+logging.basicConfig(level=logging.INFO)
 html_code = """
 <head>
     <script src="https://unpkg.com/bpmn-js@10.0.0/dist/bpmn-viewer.production.min.js"></script>
@@ -75,9 +77,11 @@ Geef een JSON structuur terug met de volgende velden:
 """}
                  ]
     )
-    files_data = response.choices[0].message.content
-    logging.info(files_data)
-    return json.loads(files_data)
+    logging.info(response["choices"][0]["message"]["content"])
+    #files_data = response.choices[0].message.content
+    #files_data = json.loads(response["choices"][0]["message"]["content"])
+    #logging.info(files_data)
+    return files_data
 
         
 st.title("BPM Generator Chatbot")
