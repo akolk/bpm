@@ -9,6 +9,25 @@ from streamlit_webrtc import webrtc_streamer
 import speech_recognition as sr
 import openai  # If using OpenAI's GPT model for chatbot
 
+html_code = """
+<head>
+    <script src="https://unpkg.com/bpmn-js@10.0.0/dist/bpmn-viewer.production.min.js"></script>
+</head>
+<body>
+    <div id="bpmn-container" style="width: 100%; height: 500px; border: 1px solid #ccc;"></div>
+    <script>
+        const viewer = new BpmnJS({ container: "#bpmn-container" });        
+    </script>
+</body>
+"""
+
+#fetch("https://cdn.jsdelivr.net/gh/bpmn-io/bpmn-js-examples@master/starter/diagram.bpmn")
+#            .then(response => response.text())
+#            .then(diagramXML => viewer.importXML(diagramXML))
+#            .catch(err => console.log(err));
+
+components.html(html_code, height=550)
+
 def transcribe_audio(file_path):
     recognizer = sr.Recognizer()
     with sr.AudioFile(file_path) as source:
@@ -54,8 +73,8 @@ Geef een JSON structuur terug met de volgende velden:
                  ]
     )
     files_data = response.choices[0].message.content
-    for file_name, file_content in files_data.items():
-        st.download_button(file_name, bpmn_output, file_name, "text/xml")
+    return files_data
+
         
 st.title("BPM Generator Chatbot")
 st.write("Geef een proces beschrijving (spreek die in of type die in) en de BPMN bestanden worden gemaakt.")
@@ -66,8 +85,17 @@ if input_type == "Text":
     user_input = st.text_area("Geef een beschrijving van het proces: ")
     if st.button("Generate BPMN"):
         if user_input:
-            generate_bpmn(st, user_input)
+            files = generate_bpmn(st, user_input)
             #st.download_button("Download BPMN", bpmn_output, "process.bpmn", "text/xml")
+            dia_code = f"""
+            <script>
+                viewer.importXML({files['diagram.xml']});
+            </script>
+            """
+            st.components.v1.html(dia_code, height=550)
+            for file_name, file_content in files.items():
+                st.download_button(file_name, bpmn_output, file_name, "text/xml")
+            #components.html(dia_code, height=550)
         else:
             st.warning("Geef een beschrijving van het proces.")
 
