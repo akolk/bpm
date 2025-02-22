@@ -65,7 +65,7 @@ elif input_type == "Speech":
 
     if audio_value:
        
-        transcript = client.audio.transcriptions.create(
+       transcript = client.audio.transcriptions.create(
           model="whisper-1",
           file = audio_value
        )
