@@ -163,7 +163,7 @@ if input_type == "Text":
             #st.download_button("Download BPMN", bpmn_output, "process.bpmn", "text/xml")
             dia_code = f"""
             <script>
-                viewer.importXML({test]});
+                viewer.importXML({test});
             </script>
             """
             st.components.v1.html(dia_code, height=550)
