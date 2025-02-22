@@ -71,6 +71,22 @@ elif input_type == "Speech":
 
     transcript_text = transcript.text
     st.write(transcript_text)
+      txt_file = "transcription.txt"
+
+    # Initialize session state for download confirmation
+    if "downloaded" not in st.session_state:
+          st.session_state.downloaded = False
+
+    # Download button
+    if st.download_button(
+       label="Download Transcription",
+       file_name="transcription.txt",data=transcript_text,
+    ):
+    st.session_state.downloaded = True
+
+    # Show success message after download
+    if st.session_state.downloaded:
+        st.success("Transcription file downloaded successfully!")
     
     #st.write("Click the button and speak your process description.")
     #text = recognize_speech()
