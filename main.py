@@ -60,11 +60,23 @@ if input_type == "Text":
             st.warning("Please enter a process description.")
 
 elif input_type == "Speech":
-    st.write("Click the button and speak your process description.")
-    text = recognize_speech()
-    if text:
-        bpmn_output = generate_bpmn(text)
-        st.download_button("Download BPMN file", bpmn_output, "process.bpmn", "text/xml")
+
+    audio_value = st.audio_input("Vertel het over het proces.")
+
+    if audio_value:
+       transcript = client.audio.transcriptions.create(
+          model="whisper-1",
+          file = audio_value
+       )
+
+    transcript_text = transcript.text
+    st.write(transcript_text)
+    
+    #st.write("Click the button and speak your process description.")
+    #text = recognize_speech()
+    #if text:
+    #    bpmn_output = generate_bpmn(text)
+    #    st.download_button("Download BPMN file", bpmn_output, "process.bpmn", "text/xml")
 
 elif input_type == "Audio File":
     uploaded_file = st.file_uploader("Upload an audio file", type=["wav", "mp3", "m4a"])
