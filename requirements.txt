@@ -3,3 +3,4 @@ openai
 pydub
 speechrecognition
 streamlit-webrtc
+pyaudio
