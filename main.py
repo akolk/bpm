@@ -73,6 +73,7 @@ Geef een JSON structuur terug met de volgende velden:
                  ]
     )
     files_data = response.choices[0].message.content
+    print(files_data)
     return files_data
 
         
@@ -89,7 +90,7 @@ if input_type == "Text":
             #st.download_button("Download BPMN", bpmn_output, "process.bpmn", "text/xml")
             dia_code = f"""
             <script>
-                viewer.importXML({files['diagram.xml']});
+                viewer.importXML({files["diagram.xml"]});
             </script>
             """
             st.components.v1.html(dia_code, height=550)
