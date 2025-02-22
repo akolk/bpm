@@ -96,7 +96,7 @@ if input_type == "Text":
         if user_input:
             files = generate_bpmn(st, user_input)
             print(files)
-            teest="""
+            test="""
             <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
              xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
