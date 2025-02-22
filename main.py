@@ -71,7 +71,7 @@ elif input_type == "Speech":
 
     transcript_text = transcript.text
     st.write(transcript_text)
-      txt_file = "transcription.txt"
+    txt_file = "transcription.txt"
 
     # Initialize session state for download confirmation
     if "downloaded" not in st.session_state:
