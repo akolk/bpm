@@ -2,6 +2,8 @@ import streamlit as st
 import openai
 import speech_recognition as sr
 import os
+import json
+
 from pydub import AudioSegment
 from pydub.playback import play
 
@@ -69,12 +71,12 @@ Geef een JSON structuur terug met de volgende velden:
     "annotatie.md": "De BPMN annotatie van het process.",
     "proces_beschrijving.md": "De formele beschrijving van het proces."
 }
-                  """}
+"""}
                  ]
     )
     files_data = response.choices[0].message.content
     print(files_data)
-    return files_data
+    return json.loads(files_data)
 
         
 st.title("BPM Generator Chatbot")
@@ -87,6 +89,7 @@ if input_type == "Text":
     if st.button("Generate BPMN"):
         if user_input:
             files = generate_bpmn(st, user_input)
+            print(files)
             #st.download_button("Download BPMN", bpmn_output, "process.bpmn", "text/xml")
             dia_code = f"""
             <script>
