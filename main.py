@@ -96,10 +96,74 @@ if input_type == "Text":
         if user_input:
             files = generate_bpmn(st, user_input)
             print(files)
+            teest="""
+            <?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             targetNamespace="http://bpmn.io/schema/bpmn">
+
+  <process id="OpvoerenNieuweKlant" name="Opvoeren Nieuwe Klant" isExecutable="true">
+    
+    <!-- Start Event -->
+    <startEvent id="StartEvent" name="Nieuwe klantaanvraag ontvangen"/>
+    
+    <!-- Stap 1: Aanvraag indienen -->
+    <task id="AanvraagIndienen" name="Verkoper dient klantgegevens in"/>
+    <sequenceFlow sourceRef="StartEvent" targetRef="AanvraagIndienen"/>
+    
+    <!-- Stap 2: KYC-controle -->
+    <task id="KYCControle" name="Compliance controleert klant (KYC)"/>
+    <sequenceFlow sourceRef="AanvraagIndienen" targetRef="KYCControle"/>
+    
+    <!-- Gateway: KYC goedgekeurd? -->
+    <exclusiveGateway id="KYC_Gateway" name="KYC goedgekeurd?"/>
+    <sequenceFlow sourceRef="KYCControle" targetRef="KYC_Gateway"/>
+    
+    <!-- KYC Afwijzing -->
+    <endEvent id="AfwijzingKYC" name="Klant afgewezen"/>
+    <sequenceFlow sourceRef="KYC_Gateway" targetRef="AfwijzingKYC">
+      <conditionExpression xsi:type="tFormalExpression">false</conditionExpression>
+    </sequenceFlow>
+    
+    <!-- Stap 3: Kredietwaardigheidscontrole -->
+    <task id="KredietControle" name="Financiële controle (kredietwaardigheid)"/>
+    <sequenceFlow sourceRef="KYC_Gateway" targetRef="KredietControle">
+      <conditionExpression xsi:type="tFormalExpression">true</conditionExpression>
+    </sequenceFlow>
+    
+    <!-- Gateway: Krediet goedgekeurd? -->
+    <exclusiveGateway id="Krediet_Gateway" name="Krediet goedgekeurd?"/>
+    <sequenceFlow sourceRef="KredietControle" targetRef="Krediet_Gateway"/>
+    
+    <!-- Krediet Afwijzing -->
+    <endEvent id="AfwijzingKrediet" name="Klant afgewezen"/>
+    <sequenceFlow sourceRef="Krediet_Gateway" targetRef="AfwijzingKrediet">
+      <conditionExpression xsi:type="tFormalExpression">false</conditionExpression>
+    </sequenceFlow>
+    
+    <!-- Stap 4: Klantregistratie in systeem -->
+    <task id="Registratie" name="IT registreert klant in CRM/ERP"/>
+    <sequenceFlow sourceRef="Krediet_Gateway" targetRef="Registratie">
+      <conditionExpression xsi:type="tFormalExpression">true</conditionExpression>
+    </sequenceFlow>
+    
+    <!-- Stap 5: Bevestiging versturen -->
+    <task id="Bevestiging" name="Bevestiging naar klant en verkoopteam"/>
+    <sequenceFlow sourceRef="Registratie" targetRef="Bevestiging"/>
+    
+    <!-- End Event -->
+    <endEvent id="Einde" name="Klant succesvol geregistreerd"/>
+    <sequenceFlow sourceRef="Bevestiging" targetRef="Einde"/>
+    
+  </process>
+</definitions>
+"""
             #st.download_button("Download BPMN", bpmn_output, "process.bpmn", "text/xml")
             dia_code = f"""
             <script>
-                viewer.importXML({files["diagram.xml"]});
+                viewer.importXML({test]});
             </script>
             """
             st.components.v1.html(dia_code, height=550)
