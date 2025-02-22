@@ -64,7 +64,8 @@ elif input_type == "Speech":
     audio_value = st.audio_input("Vertel het over het proces.")
 
     if audio_value:
-       transcript = client.audio.transcriptions.create(
+       
+        transcript = client.audio.transcriptions.create(
           model="whisper-1",
           file = audio_value
        )
@@ -73,26 +74,26 @@ elif input_type == "Speech":
        st.write(transcript_text)
        txt_file = "transcription.txt"
 
-    # Initialize session state for download confirmation
-    if "downloaded" not in st.session_state:
-          st.session_state.downloaded = False
+       # Initialize session state for download confirmation
+       if "downloaded" not in st.session_state:
+           st.session_state.downloaded = False
 
-    # Download button
-    if st.download_button(
+       # Download button
+       if st.download_button(
           label="Download Transcription",
           file_name="transcription.txt",data=transcript_text,
-       ):
-       st.session_state.downloaded = True
+          ):
+          st.session_state.downloaded = True
 
-    # Show success message after download
-    if st.session_state.downloaded:
-        st.success("Transcription file downloaded successfully!")
+       # Show success message after download
+       if st.session_state.downloaded:
+          st.success("Transcription file downloaded successfully!")
     
-    #st.write("Click the button and speak your process description.")
-    #text = recognize_speech()
-    #if text:
-    #    bpmn_output = generate_bpmn(text)
-    #    st.download_button("Download BPMN file", bpmn_output, "process.bpmn", "text/xml")
+       #st.write("Click the button and speak your process description.")
+       #text = recognize_speech()
+       #if text:
+       #    bpmn_output = generate_bpmn(text)
+       #    st.download_button("Download BPMN file", bpmn_output, "process.bpmn", "text/xml")
 
 elif input_type == "Audio File":
     uploaded_file = st.file_uploader("Upload an audio file", type=["wav", "mp3", "m4a"])
