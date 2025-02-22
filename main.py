@@ -3,6 +3,7 @@ import openai
 import speech_recognition as sr
 import os
 import json
+import logging
 
 from pydub import AudioSegment
 from pydub.playback import play
@@ -75,7 +76,7 @@ Geef een JSON structuur terug met de volgende velden:
                  ]
     )
     files_data = response.choices[0].message.content
-    print(files_data)
+    logging.info(files_data)
     return json.loads(files_data)
 
         
