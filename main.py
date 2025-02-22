@@ -5,6 +5,10 @@ import os
 from pydub import AudioSegment
 from pydub.playback import play
 
+from streamlit_webrtc import webrtc_streamer
+import speech_recognition as sr
+import openai  # If using OpenAI's GPT model for chatbot
+
 def transcribe_audio(file_path):
     recognizer = sr.Recognizer()
     with sr.AudioFile(file_path) as source:
@@ -18,6 +22,20 @@ def transcribe_audio(file_path):
     except sr.RequestError:
         return "Error in request to speech recognition API."
 
+# Function to recognize speech from audio
+def recognize_speech():
+    recognizer = sr.Recognizer()
+    with sr.Microphone() as source:
+        st.info("Spreek...")
+        try:
+            audio = recognizer.listen(source, timeout=5)
+            text = recognizer.recognize_google(audio)  # Google Speech API
+            return text
+        except sr.UnknownValueError:
+            return "Sorry, I kan dat niet verstaan of begrijpen."
+        except sr.RequestError:
+            return "Speech Recognition service is niet beschikbaar."
+
 client = openai.OpenAI()
 
 def generate_bpmn(text):
@@ -26,7 +44,6 @@ def generate_bpmn(text):
         messages=[{"role": "user", "content": f"Create a BPMN XML for the following process: {text}"}]
     )
     return response.choices[0].message.content
-
 
 st.title("BPM Generator Chatbot")
 st.write("Speak, upload an audio file, or type a process description to generate a BPMN file.")
@@ -44,18 +61,10 @@ if input_type == "Text":
 
 elif input_type == "Speech":
     st.write("Click the button and speak your process description.")
-    if st.button("Start Recording"):
-        recognizer = sr.Recognizer()
-        with sr.Microphone() as source:
-            st.write("Listening...")
-            audio = recognizer.listen(source)
-            with open("temp.wav", "wb") as f:
-                f.write(audio.get_wav_data())
-            text = transcribe_audio("temp.wav")
-            st.write(f"Recognized text: {text}")
-            if text:
-                bpmn_output = generate_bpmn(text)
-                st.download_button("Download BPMN", bpmn_output, "process.bpmn", "text/xml")
+    text = recognize_speech()
+    if text:
+        bpmn_output = generate_bpmn(text)
+        st.download_button("Download BPMN file", bpmn_output, "process.bpmn", "text/xml")
 
 elif input_type == "Audio File":
     uploaded_file = st.file_uploader("Upload an audio file", type=["wav", "mp3", "m4a"])
