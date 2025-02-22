@@ -38,28 +38,40 @@ def recognize_speech():
 
 client = openai.OpenAI()
 
-def generate_bpmn(text):
+def generate_bpmn(st, text):
     response = client.chat.completions.create(
         model="gpt-4",
-        messages=[{"role": "user", "content": f"Create a BPMN XML for the following process: {text}"}]
+        messages=[{"role": "user", "content": 
+                   f"Maak een BPMN notatie en een BPMN diagram voor een process. {text}"},
+                  {"role": "user", "content": """
+Geef een JSON structuur terug met de volgende velden:
+{
+    "diagram.xml": "De visualisatie van het process in XML.",
+    "annotatie.md": "De BPMN annotatie van het process.",
+    "proces_beschrijving.md": "De formele beschrijving van het proces'"
+}
+                  """
+                 ]
     )
-    return response.choices[0].message.content
-
+    files_data = response.choices[0].message.content
+    for file_name, file_content in files_data.items():
+        st.download_button(file_name, bpmn_output, file_name, "text/xml")
+        
 st.title("BPM Generator Chatbot")
-st.write("Speak, upload an audio file, or type a process description to generate a BPMN file.")
+st.write("Geef een proces beschrijving (spreek die in of type die in) en de BPMN bestanden worden gemaakt.")
 
-input_type = st.radio("Choose Input Type:", ("Text", "Speech", "Audio File"))
+input_type = st.radio("Kies invoer type ", ("Text", "Spraak"))
 
 if input_type == "Text":
-    user_input = st.text_area("Enter process description:")
+    user_input = st.text_area("Geef een beschrijving van het proces: ")
     if st.button("Generate BPMN"):
         if user_input:
-            bpmn_output = generate_bpmn(user_input)
-            st.download_button("Download BPMN", bpmn_output, "process.bpmn", "text/xml")
+            generate_bpmn(st, user_input)
+            #st.download_button("Download BPMN", bpmn_output, "process.bpmn", "text/xml")
         else:
-            st.warning("Please enter a process description.")
+            st.warning("Geef een beschrijving van het proces.")
 
-elif input_type == "Speech":
+elif input_type == "Spraak":
 
     audio_value = st.audio_input("Vertel het over het proces.")
 
@@ -71,7 +83,7 @@ elif input_type == "Speech":
        )
 
        transcript_text = transcript.text
-       st.write(transcript_text)
+       #st.write(transcript_text)
        txt_file = "transcription.txt"
 
        # Initialize session state for download confirmation
@@ -85,6 +97,8 @@ elif input_type == "Speech":
           ):
           st.session_state.downloaded = True
 
+
+       output = generate_bpmn(st, transcript.text)
        # Show success message after download
        if st.session_state.downloaded:
           st.success("Transcription file downloaded successfully!")
