@@ -26,7 +26,7 @@ html_code = """
 #            .then(diagramXML => viewer.importXML(diagramXML))
 #            .catch(err => console.log(err));
 
-components.html(html_code, height=550)
+st.components.v1.html(html_code, height=550)
 
 def transcribe_audio(file_path):
     recognizer = sr.Recognizer()
