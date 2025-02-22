@@ -79,10 +79,10 @@ elif input_type == "Speech":
 
     # Download button
     if st.download_button(
-       label="Download Transcription",
-       file_name="transcription.txt",data=transcript_text,
-    ):
-    st.session_state.downloaded = True
+          label="Download Transcription",
+          file_name="transcription.txt",data=transcript_text,
+       ):
+       st.session_state.downloaded = True
 
     # Show success message after download
     if st.session_state.downloaded:
