@@ -3,14 +3,12 @@ import os
 import json
 import logging
 
-#from pydub import AudioSegment
-#from pydub.playback import play
-
 from streamlit_webrtc import webrtc_streamer
 import speech_recognition as sr
 import openai  # If using OpenAI's GPT model for chatbot
 
 logging.basicConfig(level=logging.INFO)
+
 html_code = """
 <!DOCTYPE html>
 <html lang="en">
