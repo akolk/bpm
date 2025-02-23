@@ -64,7 +64,7 @@ client = openai.OpenAI()
 
 def generate_bpmn(st, text):
     response = client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-4-turbo",
         response_format= { "type": "json_object" },
         messages=[{"role": "user", "content": 
                    f"""
