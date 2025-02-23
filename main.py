@@ -66,11 +66,11 @@ def generate_bpmn(st, text):
     response = client.chat.completions.create(
         model="gpt-4",
         messages=[{"role": "user", "content": 
-                   f"Maak een BPMN notatie en een BPMN diagram voor een process. {text}"},
+                   f"Je bent een BPMN specialist en je antwoord altijd in een jsonobject. Maak een BPMN notatie en een BPMN diagram dat door Blue Dolphin gelezen kan worden voor het volgende proces: {text}"},
                   {"role": "user", "content": """
-Geef een JSON structuur terug met de volgende velden:
+Geef een JSON object terug met de volgende velden:
 {
-    "diagram.xml": "De visualisatie van het process in XML.",
+    "diagram.xml": "De Blue Dolphin compatible XML.",
     "annotatie.md": "De BPMN annotatie van het process.",
     "proces_beschrijving.md": "De formele beschrijving van het proces."
 }
