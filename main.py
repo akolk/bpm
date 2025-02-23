@@ -60,10 +60,10 @@ def recognize_speech():
         except sr.RequestError:
             return "Speech Recognition service is niet beschikbaar."
 
-client = openai.OpenAI()
+#client = openai.OpenAI()
 
 def generate_bpmn(st, text):
-    response = client.chat.completions.create(
+    response = openai.ChatCompletion.create(
         model="gpt-4",
         response_format= "json",
         messages=[{"role": "user", "content": 
@@ -184,7 +184,7 @@ elif input_type == "Spraak":
 
     if audio_value:
        
-       transcript = client.audio.transcriptions.create(
+       transcript = openai.audio.transcriptions.create(
           model="whisper-1",
           file = audio_value
        )
