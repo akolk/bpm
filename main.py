@@ -65,7 +65,7 @@ client = openai.OpenAI()
 def generate_bpmn(st, text):
     response = client.chat.completions.create(
         model="gpt-4",
-        response_format= { "type":"json_object" },
+        response_format= "json",
         messages=[{"role": "user", "content": 
                    f"""
                    Je bent een BPMN specialist en je antwoord alleen in een JSON object.
