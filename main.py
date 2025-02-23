@@ -66,20 +66,24 @@ def generate_bpmn(st, text):
     response = client.chat.completions.create(
         model="gpt-4",
         messages=[{"role": "user", "content": 
-                   f"Je bent een BPMN specialist en je antwoord alleen in een JSON object. Maak een BPMN notatie en een BPMN diagram dat door Blue Dolphin gelezen kan worden voor het volgende proces: {text}"},
-                  {"role": "user", "content": """
-Geef een JSON object terug met de volgende velden:
-{
-    "diagram.xml": "De Blue Dolphin compatible XML.",
-    "annotatie.md": "De BPMN annotatie van het process.",
-    "proces_beschrijving.md": "De formele beschrijving van het proces."
-}
-"""}
+                   f"""
+                   Je bent een BPMN specialist en je antwoord alleen in een JSON object.
+                   Maak een BPMN notatie en een BPMN 2.0 XML-formaat van het volgende proces: {text}
+                   """},
+                  {"role": "user", "content": 
+                   """
+                   Geef een JSON object terug met de volgende velden:
+                   {
+                     "diagram.xml": "De diagram in Blue Dolphin compatible XML.",
+                     "annotatie.md": "De BPMN annotatie van het process in markdown formaat.",
+                     "proces_beschrijving.md": "De formele beschrijving van het proces in markdown formaat."
+                   }
+                   """}
                  ]
     )
     logging.info(response)
     logging.info(response.choices[0].message.content)
-    files_data = json.loads(esponse.choices[0].message.content)
+    files_data = json.loads(response.choices[0].message.content)
     #files_data = json.loads(response["choices"][0]["message"]["content"])
     logging.info(files_data)
     return files_data
