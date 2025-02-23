@@ -18,13 +18,14 @@ html_code = """
 <head>
     <script src="https://unpkg.com/bpmn-js@10.0.0/dist/bpmn-viewer.production.min.js"></script>
 </head>
-<body>
-    <div id="bpmn-container" style="width: 100%; height: 500px; border: 1px solid #ccc;"></div>
-    <script>
-        const viewer = new BpmnJS({ container: "#bpmn-container" });        
-    </script>
-</body>
 """
+
+#<body>
+#    <div id="bpmn-container" style="width: 100%; height: 500px; border: 1px solid #ccc;"></div>
+#    <script>
+#        const viewer = new BpmnJS({ container: "#bpmn-container" });        
+#    </script>
+#</body>
 
 #fetch("https://cdn.jsdelivr.net/gh/bpmn-io/bpmn-js-examples@master/starter/diagram.bpmn")
 #            .then(response => response.text())
@@ -167,14 +168,18 @@ if input_type == "Text":
 """
             #st.download_button("Download BPMN", bpmn_output, "process.bpmn", "text/xml")
             dia_code = f"""
-            <script>
-                viewer.importXML({test});
-            </script>
+            <body>
+                <div id="bpmn-container" style="width: 100%; height: 500px; border: 1px solid #ccc;"></div>
+                <script>
+                   const viewer = new BpmnJS({{ container: "#bpmn-container" }});
+                   viewer.importXML({test});
+                </script>
+            </body>
             """
             st.components.v1.html(dia_code, height=550)
             for file_name, file_content in files.items():
                 st.download_button(file_name, file_content, file_name, "text/xml")
-            #components.html(dia_code, height=550)
+            components.html(dia_code, height=550)
         else:
             st.warning("Geef een beschrijving van het proces.")
 
