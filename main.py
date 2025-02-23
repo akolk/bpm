@@ -1,5 +1,4 @@
 import streamlit as st
-import speech_recognition as sr
 import os
 import json
 import logging
@@ -10,7 +9,6 @@ from pydub.playback import play
 from streamlit_webrtc import webrtc_streamer
 import speech_recognition as sr
 import openai  # If using OpenAI's GPT model for chatbot
-
 
 logging.basicConfig(level=logging.INFO)
 html_code = """
@@ -168,11 +166,11 @@ if input_type == "Text":
             #st.download_button("Download BPMN", bpmn_output, "process.bpmn", "text/xml")
             dia_code = f"""
             <body>
-                <div id="bpmn-container" style="width: 100%; height: 500px; border: 1px solid #ccc;"></div>
-                <script>
-                   const viewer = new BpmnJS({{ container: "#bpmn-container" }});
-                   viewer.importXML({test});
-                </script>
+               <div id="bpmn-container" style="width: 100%; height: 500px; border: 1px solid #ccc;"></div>
+               <script>
+                  const viewer = new BpmnJS({{ container: "#bpmn-container" }});
+                  viewer.importXML(`{test.replace('"', '\\"')}`).catch(err => console.log(err));
+               </script>
             </body>
             """
             st.components.v1.html(dia_code, height=550)
