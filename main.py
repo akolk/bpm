@@ -204,9 +204,6 @@ if input_type == "Text":
                  renderBPMN(`{test}`);
               }}, 500);
             </script>
-            """,
-            height=500,
-            )
             """
             st.components.v1.html(dia_code, height=550)
             for file_name, file_content in files.items():
