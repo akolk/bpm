@@ -3,8 +3,8 @@ import os
 import json
 import logging
 
-from pydub import AudioSegment
-from pydub.playback import play
+#from pydub import AudioSegment
+#from pydub.playback import play
 
 from streamlit_webrtc import webrtc_streamer
 import speech_recognition as sr
@@ -29,7 +29,7 @@ html_code = """
 #            .then(diagramXML => viewer.importXML(diagramXML))
 #            .catch(err => console.log(err));
 
-st.components.v1.html(html_code, height=550)
+st.components.v1.html(html_code)
 
 def transcribe_audio(file_path):
     recognizer = sr.Recognizer()
