@@ -106,7 +106,7 @@ def generate_bpmn(st, text):
                    """
                    Geef een JSON object terug met de volgende velden:
                    {
-                     "diagram.xml": "De diagram in Blue Dolphin compatible XML.",
+                     "diagram.bpmn": "De diagram in Blue Dolphin compatible XML.",
                      "annotatie.md": "De BPMN annotatie van het process in markdown formaat.",
                      "proces_beschrijving.md": "De formele beschrijving van het proces in markdown formaat."
                    }
@@ -214,10 +214,11 @@ if input_type == "Text":
 
 elif input_type == "Spraak":
 
-    audio_value = st.audio_input("Vertel het over het proces.")
+    audio_value = st.audio_input("Klik op de microfoon en wacht een paar seconden. Vertel dan het over het proces. Klik op stop wanneer je klaar bent")
 
     if audio_value:
-       
+
+       st.write("Bezig met transcriptie ...")
        transcript = client.audio.transcriptions.create(
           model="whisper-1",
           file = audio_value
@@ -232,10 +233,7 @@ elif input_type == "Spraak":
            st.session_state.downloaded = False
 
        # Download button
-       if st.download_button(
-          label="Download Transcription",
-          file_name="transcription.txt",data=transcript_text,
-          ):
+       if st.download_button(label="Download Transcription", file_name="transcription.txt",data=transcript_text,):
           st.session_state.downloaded = True
 
 
@@ -244,20 +242,3 @@ elif input_type == "Spraak":
        if st.session_state.downloaded:
           st.success("Transcription file downloaded successfully!")
     
-       #st.write("Click the button and speak your process description.")
-       #text = recognize_speech()
-       #if text:
-       #    bpmn_output = generate_bpmn(text)
-       #    st.download_button("Download BPMN file", bpmn_output, "process.bpmn", "text/xml")
-
-elif input_type == "Audio File":
-    uploaded_file = st.file_uploader("Upload an audio file", type=["wav", "mp3", "m4a"])
-    if uploaded_file:
-        file_path = f"temp.{uploaded_file.name.split('.')[-1]}"
-        with open(file_path, "wb") as f:
-            f.write(uploaded_file.read())
-        text = transcribe_audio(file_path)
-        st.write(f"Recognized text: {text}")
-        if text:
-            bpmn_output = generate_bpmn(text)
-            st.download_button("Download BPMN", bpmn_output, "process.bpmn", "text/xml")
