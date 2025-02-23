@@ -12,9 +12,42 @@ import openai  # If using OpenAI's GPT model for chatbot
 
 logging.basicConfig(level=logging.INFO)
 html_code = """
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <script src="https://unpkg.com/bpmn-js@10.0.0/dist/bpmn-viewer.production.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/bpmn-js@18.3.1/dist/bpmn-navigated-viewer.development.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+        #canvas {
+            width: 100%;
+            height: 100vh;
+            border: 1px solid #ccc;
+        }
+    </style>
 </head>
+<body>
+    <div id="canvas"></div>
+    <script>
+        function renderBPMN(xml) {
+            var viewer = new BpmnJS({ container: '#canvas' });
+            viewer.importXML(xml, function(err) {
+                if (err) {
+                    console.error("Could not import BPMN diagram:", err);
+                }
+            });
+        }
+        window.renderBPMN = renderBPMN;
+    </script>
+</body>
+</html>
 """
 
 #<body>
@@ -101,7 +134,7 @@ if input_type == "Text":
             print(files)
             test="""
             <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+            <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
              xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
              xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
              xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
@@ -165,13 +198,15 @@ if input_type == "Text":
 """
             #st.download_button("Download BPMN", bpmn_output, "process.bpmn", "text/xml")
             dia_code = f"""
-            <body>
-               <div id="bpmn-container" style="width: 100%; height: 500px; border: 1px solid #ccc;"></div>
-               <script>
-                  const viewer = new BpmnJS({{ container: "#bpmn-container" }});
-                  viewer.importXML(`{test.replace('"', '\\"')}`).catch(err => console.log(err));
-               </script>
-            </body>
+            {html_code}
+            <script>
+              setTimeout(function() {{
+                 renderBPMN(`{test}`);
+              }}, 500);
+            </script>
+            """,
+            height=500,
+            )
             """
             st.components.v1.html(dia_code, height=550)
             for file_name, file_content in files.items():
