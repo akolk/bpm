@@ -80,7 +80,7 @@ Geef een JSON structuur terug met de volgende velden:
     logging.info(response)
     logging.info(response.choices[0].message.content)
     files_data = response.choices[0].message.content
-    #files_data = json.loads(response["choices"][0]["message"]["content"])
+    files_data = json.loads(response["choices"][0]["message"]["content"])
     #logging.info(files_data)
     return files_data
 
