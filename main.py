@@ -224,7 +224,7 @@ elif input_type == "Spraak":
        )
 
        transcript_text = transcript.text
-       #st.write(transcript_text)
+       st.write(transcript_text)
        txt_file = "transcription.txt"
 
        # Initialize session state for download confirmation
