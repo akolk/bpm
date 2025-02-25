@@ -9,124 +9,7 @@ import openai  # If using OpenAI's GPT model for chatbot
 
 logging.basicConfig(level=logging.INFO)
 
-html_code = """
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/bpmn-js/dist/bpmn-viewer.development.js"></script>
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            width: 100%;
-            height: 100%;
-        }
-        #canvas {
-            width: 100%;
-            height: 100vh;
-            border: 1px solid #ccc;
-        }
-    </style>
-</head>
-<body>
-    <div id="canvas"></div>
-    <script>
-        var viewer = new BpmnJS({ container: '#canvas' });  
-        
-        async function renderBPMN(xml) {
-            await viewer.importXML(xml) 
-        }
-        window.renderBPMN = renderBPMN;
-    </script>
-
-"""
-
-#<body>
-#    <div id="bpmn-container" style="width: 100%; height: 500px; border: 1px solid #ccc;"></div>
-#    <script>
-#        const viewer = new BpmnJS({ container: "#bpmn-container" });        
-#    </script>
-#</body>
-
-#fetch("https://cdn.jsdelivr.net/gh/bpmn-io/bpmn-js-examples@master/starter/diagram.bpmn")
-#            .then(response => response.text())
-#            .then(diagramXML => viewer.importXML(diagramXML))
-#            .catch(err => console.log(err));
-
-st.components.v1.html(html_code)
-
-def transcribe_audio(file_path):
-    recognizer = sr.Recognizer()
-    with sr.AudioFile(file_path) as source:
-        audio = recognizer.record(source)
-    
-    try:
-        text = recognizer.recognize_google(audio)
-        return text
-    except sr.UnknownValueError:
-        return "Could not understand the audio."
-    except sr.RequestError:
-        return "Error in request to speech recognition API."
-
-# Function to recognize speech from audio
-def recognize_speech():
-    recognizer = sr.Recognizer()
-    with sr.Microphone() as source:
-        st.info("Spreek...")
-        try:
-            audio = recognizer.listen(source, timeout=5)
-            text = recognizer.recognize_google(audio)  # Google Speech API
-            return text
-        except sr.UnknownValueError:
-            return "Sorry, I kan dat niet verstaan of begrijpen."
-        except sr.RequestError:
-            return "Speech Recognition service is niet beschikbaar."
-
-client = openai.OpenAI()
-
-def generate_bpmn(st, text):
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",    #"gpt-4-1106-preview",      # gpt-4
-        response_format= { "type": "json_object" },
-        messages=[{"role": "user", "content": 
-                   f"""
-                   Je bent een BPMN specialist en je antwoord alleen in een JSON object.
-                   Maak een BPMN notatie en een BPMN 2.0 XML-formaat van het volgende proces: {text}
-                   """},
-                  {"role": "user", "content": 
-                   """
-                   Geef een JSON object terug met de volgende velden:
-                   {
-                     "diagram.bpmn": "De diagram in Blue Dolphin compatible XML.",
-                     "annotatie.md": "De BPMN annotatie van het process in markdown formaat.",
-                     "proces_beschrijving.md": "De formele beschrijving van het proces in markdown formaat."
-                   }
-                   """}
-                 ]
-    )
-    #logging.info(response)
-    #logging.info(response.choices[0].message.content)
-    files_data = json.loads(response.choices[0].message.content)
-    #files_data = json.loads(response["choices"][0]["message"]["content"])
-    logging.info(files_data)
-    return files_data
-
-        
-st.title("BPM Generator Chatbot")
-st.write("Geef een proces beschrijving (spreek die in of type die in) en de BPMN bestanden worden gemaakt.")
-
-input_type = st.radio("Kies invoer type ", ("Text", "Spraak"))
-
-if input_type == "Text":
-    user_input = st.text_area("Geef een beschrijving van het proces: ")
-    if st.button("Generate BPMN"):
-        if user_input:
-            files = generate_bpmn(st, user_input)
-            #print(files)
-            test="""<?xml version="1.0" encoding="UTF-8"?>
+ test="""<?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
   <collaboration id="sid-c0e745ff-361e-4afb-8c8d-2a1fc32b1424">
     <participant id="sid-87F4C1D6-25E1-4A45-9DA7-AD945993D06F" name="Customer" processRef="sid-C3803939-0872-457F-8336-EAE484DC4A04" />
@@ -275,18 +158,138 @@ if input_type == "Text":
   </bpmndi:BPMNDiagram>
 </definitions>
 """
+
+html_code = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/bpmn-js/dist/bpmn-viewer.development.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+        #canvas {
+            width: 100%;
+            height: 100vh;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas"></div>
+    <script>
+        var viewer = new BpmnJS({ container: '#canvas' });  
+        
+        async function renderBPMN(xml) {
+            await viewer.importXML(xml) 
+        }
+        window.renderBPMN = renderBPMN;
+    </script>
+
+"""
+
+#<body>
+#    <div id="bpmn-container" style="width: 100%; height: 500px; border: 1px solid #ccc;"></div>
+#    <script>
+#        const viewer = new BpmnJS({ container: "#bpmn-container" });        
+#    </script>
+#</body>
+
+#fetch("https://cdn.jsdelivr.net/gh/bpmn-io/bpmn-js-examples@master/starter/diagram.bpmn")
+#            .then(response => response.text())
+#            .then(diagramXML => viewer.importXML(diagramXML))
+#            .catch(err => console.log(err));
+
+#st.components.v1.html(html_code)
+
+def transcribe_audio(file_path):
+    recognizer = sr.Recognizer()
+    with sr.AudioFile(file_path) as source:
+        audio = recognizer.record(source)
+    
+    try:
+        text = recognizer.recognize_google(audio)
+        return text
+    except sr.UnknownValueError:
+        return "Could not understand the audio."
+    except sr.RequestError:
+        return "Error in request to speech recognition API."
+
+# Function to recognize speech from audio
+def recognize_speech():
+    recognizer = sr.Recognizer()
+    with sr.Microphone() as source:
+        st.info("Spreek...")
+        try:
+            audio = recognizer.listen(source, timeout=5)
+            text = recognizer.recognize_google(audio)  # Google Speech API
+            return text
+        except sr.UnknownValueError:
+            return "Sorry, I kan dat niet verstaan of begrijpen."
+        except sr.RequestError:
+            return "Speech Recognition service is niet beschikbaar."
+
+client = openai.OpenAI()
+
+def generate_bpmn(st, text):
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",    #"gpt-4-1106-preview",      # gpt-4
+        response_format= { "type": "json_object" },
+        messages=[{"role": "user", "content": 
+                   f"""
+                   Je bent een BPMN specialist en je antwoord alleen in een JSON object.
+                   Maak een BPMN notatie en een BPMN 2.0 XML-formaat van het volgende proces: {text}
+                   """},
+                  {"role": "user", "content": 
+                   """
+                   Geef een JSON object terug met de volgende velden:
+                   {
+                     "diagram.bpmn": "De diagram in Blue Dolphin compatible XML.",
+                     "annotatie.md": "De BPMN annotatie van het process in markdown formaat.",
+                     "proces_beschrijving.md": "De formele beschrijving van het proces in markdown formaat."
+                   }
+                   """}
+                 ]
+    )
+    #logging.info(response)
+    #logging.info(response.choices[0].message.content)
+    files_data = json.loads(response.choices[0].message.content)
+    #files_data = json.loads(response["choices"][0]["message"]["content"])
+    logging.info(files_data)
+    return files_data
+
+        
+st.title("BPM Generator Chatbot")
+st.write("Geef een proces beschrijving (spreek die in of type die in) en de BPMN bestanden worden gemaakt.")
+
+input_type = st.radio("Kies invoer type ", ("Text", "Spraak"))
+
+if input_type == "Text":
+    user_input = st.text_area("Geef een beschrijving van het proces: ")
+    if st.button("Generate BPMN"):
+        if user_input:
+            files = generate_bpmn(st, user_input)
+            #print(files)
+           
             #st.download_button("Download BPMN", bpmn_output, "process.bpmn", "text/xml")
-            dia_code = f"""
-            {html_code}
-            <script>
-               renderBPMN(`{test}`);
-            </script>
-            </body>
-            </html>
-            """
-            logging.info(dia_code)
-            st.components.v1.html(dia_code, height=550)
+
             for file_name, file_content in files.items():
+                if file_name == "diagram.bpmn":
+                    dia_code = f"""
+                    {html_code}
+                    <script>
+                    renderBPMN(`{test}`);
+                    </script>
+                    </body>
+                    </html>
+                    """
+                    st.components.v1.html(dia_code, height=550)        
                 if file_content != None:
                    st.download_button(file_name, file_content, file_name, "text/xml")
             #st.components.v1.html(dia_code, height=550)
@@ -310,16 +313,28 @@ elif input_type == "Spraak":
        txt_file = "transcription.txt"
 
        # Initialize session state for download confirmation
-       if "downloaded" not in st.session_state:
-           st.session_state.downloaded = False
+       if "downloaded_transcript" not in st.session_state:
+           st.session_state.downloaded_transcript = False
 
        # Download button
        if st.download_button(label="Download Transcription", file_name="transcription.txt",data=transcript_text,):
-          st.session_state.downloaded = True
+          st.session_state.downloaded_transcript = True
 
-
-       output = generate_bpmn(st, transcript.text)
+       files = generate_bpmn(st, transcript.text)
+       for file_name, file_content in files.items():
+           if file_name == "diagram.bpmn":
+                    dia_code = f"""
+                    {html_code}
+                    <script>
+                    renderBPMN(`{test}`);
+                    </script>
+                    </body>
+                    </html>
+                    """
+                    st.components.v1.html(dia_code, height=550)        
+           if file_content != None:
+                    st.download_button(file_name, file_content, file_name, "text/xml")
        # Show success message after download
-       if st.session_state.downloaded:
+       if st.session_state.downloaded_transcript:
           st.success("Transcription file downloaded successfully!")
     
