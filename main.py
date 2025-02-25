@@ -131,68 +131,56 @@ if input_type == "Text":
             files = generate_bpmn(st, user_input)
             print(files)
             test="""
-            <?xml version="1.0" encoding="UTF-8"?>
-            <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
-             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
-             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
-             targetNamespace="http://bpmn.io/schema/bpmn">
-
-  <process id="OpvoerenNieuweKlant" name="Opvoeren Nieuwe Klant" isExecutable="true">
-    
-    <!-- Start Event -->
-    <startEvent id="StartEvent" name="Nieuwe klantaanvraag ontvangen"/>
-    
-    <!-- Stap 1: Aanvraag indienen -->
-    <task id="AanvraagIndienen" name="Verkoper dient klantgegevens in"/>
-    <sequenceFlow sourceRef="StartEvent" targetRef="AanvraagIndienen"/>
-    
-    <!-- Stap 2: KYC-controle -->
-    <task id="KYCControle" name="Compliance controleert klant (KYC)"/>
-    <sequenceFlow sourceRef="AanvraagIndienen" targetRef="KYCControle"/>
-    
-    <!-- Gateway: KYC goedgekeurd? -->
-    <exclusiveGateway id="KYC_Gateway" name="KYC goedgekeurd?"/>
-    <sequenceFlow sourceRef="KYCControle" targetRef="KYC_Gateway"/>
-    
-    <!-- KYC Afwijzing -->
-    <endEvent id="AfwijzingKYC" name="Klant afgewezen"/>
-    <sequenceFlow sourceRef="KYC_Gateway" targetRef="AfwijzingKYC">
-      <conditionExpression xsi:type="tFormalExpression">false</conditionExpression>
-    </sequenceFlow>
-    
-    <!-- Stap 3: Kredietwaardigheidscontrole -->
-    <task id="KredietControle" name="Financiële controle (kredietwaardigheid)"/>
-    <sequenceFlow sourceRef="KYC_Gateway" targetRef="KredietControle">
-      <conditionExpression xsi:type="tFormalExpression">true</conditionExpression>
-    </sequenceFlow>
-    
-    <!-- Gateway: Krediet goedgekeurd? -->
-    <exclusiveGateway id="Krediet_Gateway" name="Krediet goedgekeurd?"/>
-    <sequenceFlow sourceRef="KredietControle" targetRef="Krediet_Gateway"/>
-    
-    <!-- Krediet Afwijzing -->
-    <endEvent id="AfwijzingKrediet" name="Klant afgewezen"/>
-    <sequenceFlow sourceRef="Krediet_Gateway" targetRef="AfwijzingKrediet">
-      <conditionExpression xsi:type="tFormalExpression">false</conditionExpression>
-    </sequenceFlow>
-    
-    <!-- Stap 4: Klantregistratie in systeem -->
-    <task id="Registratie" name="IT registreert klant in CRM/ERP"/>
-    <sequenceFlow sourceRef="Krediet_Gateway" targetRef="Registratie">
-      <conditionExpression xsi:type="tFormalExpression">true</conditionExpression>
-    </sequenceFlow>
-    
-    <!-- Stap 5: Bevestiging versturen -->
-    <task id="Bevestiging" name="Bevestiging naar klant en verkoopteam"/>
-    <sequenceFlow sourceRef="Registratie" targetRef="Bevestiging"/>
-    
-    <!-- End Event -->
-    <endEvent id="Einde" name="Klant succesvol geregistreerd"/>
-    <sequenceFlow sourceRef="Bevestiging" targetRef="Einde"/>
-    
-  </process>
-</definitions>
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd" id="_ll67ABGYEeW7xqkBzIjHqw" exporter="camunda modeler" exporterVersion="2.7.0" targetNamespace="http://camunda.org/schema/1.0/bpmn">
+  <bpmn2:process id="Sample" name="Sample" isExecutable="true" camunda:historyTimeToLive="P180D">
+    <bpmn2:startEvent id="StartEvent_1">
+      <bpmn2:outgoing>SequenceFlow_1</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:userTask id="UserTask_1" name="do something">
+      <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>
+    </bpmn2:userTask>
+    <bpmn2:sequenceFlow id="SequenceFlow_1" sourceRef="StartEvent_1" targetRef="UserTask_1"/>
+    <bpmn2:serviceTask id="ServiceTask_1" camunda:delegateExpression="${sayHelloDelegate}" camunda:async="true" name="say hello">
+      <bpmn2:incoming>SequenceFlow_2</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_3</bpmn2:outgoing>
+    </bpmn2:serviceTask>
+    <bpmn2:sequenceFlow id="SequenceFlow_2" sourceRef="UserTask_1" targetRef="ServiceTask_1"/>
+    <bpmn2:endEvent id="EndEvent_1">
+      <bpmn2:incoming>SequenceFlow_3</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:sequenceFlow id="SequenceFlow_3" name="" sourceRef="ServiceTask_1" targetRef="EndEvent_1"/>
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Sample">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_3" bpmnElement="StartEvent_1">
+        <dc:Bounds height="36.0" width="36.0" x="65.0" y="97.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_UserTask_3" bpmnElement="UserTask_1">
+        <dc:Bounds height="80.0" width="100.0" x="151.0" y="75.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_1" bpmnElement="SequenceFlow_1" sourceElement="_BPMNShape_StartEvent_3" targetElement="_BPMNShape_UserTask_3">
+        <di:waypoint xsi:type="dc:Point" x="101.0" y="115.0"/>
+        <di:waypoint xsi:type="dc:Point" x="151.0" y="115.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_ServiceTask_2" bpmnElement="ServiceTask_1">
+        <dc:Bounds height="80.0" width="100.0" x="301.0" y="75.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_2" bpmnElement="SequenceFlow_2" sourceElement="_BPMNShape_UserTask_3" targetElement="_BPMNShape_ServiceTask_2">
+        <di:waypoint xsi:type="dc:Point" x="251.0" y="115.0"/>
+        <di:waypoint xsi:type="dc:Point" x="301.0" y="115.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_EndEvent_3" bpmnElement="EndEvent_1">
+        <dc:Bounds height="36.0" width="36.0" x="451.0" y="97.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_3" bpmnElement="SequenceFlow_3" sourceElement="_BPMNShape_ServiceTask_2" targetElement="_BPMNShape_EndEvent_3">
+        <di:waypoint xsi:type="dc:Point" x="401.0" y="115.0"/>
+        <di:waypoint xsi:type="dc:Point" x="451.0" y="115.0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>
 """
             #st.download_button("Download BPMN", bpmn_output, "process.bpmn", "text/xml")
             dia_code = f"""
