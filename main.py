@@ -284,7 +284,7 @@ if input_type == "Text":
                     dia_code = f"""
                     {html_code}
                     <script>
-                    renderBPMN(`{test}`);
+                    renderBPMN(`{file_content}`);
                     </script>
                     </body>
                     </html>
