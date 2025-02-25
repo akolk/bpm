@@ -15,7 +15,7 @@ html_code = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/bpmn-js@18.3.1/dist/bpmn-navigated-viewer.development.js"></script>
+    <script src="https://unpkg.com/bpmn-js/dist/bpmn-viewer.development.js"></script>
     <style>
         html, body {
             margin: 0;
@@ -34,13 +34,16 @@ html_code = """
 <body>
     <div id="canvas"></div>
     <script>
+        var viewer = new BpmnJS({ container: '#canvas' });
         function renderBPMN(xml) {
-            var viewer = new BpmnJS({ container: '#canvas' });
             viewer.importXML(xml, function(err) {
                 if (err) {
                     console.error("Could not import BPMN diagram:", err);
                 }
             });
+            } catch(err) {
+                console.log(err
+              }
         }
         window.renderBPMN = renderBPMN;
     </script>
@@ -111,8 +114,8 @@ def generate_bpmn(st, text):
                    """}
                  ]
     )
-    logging.info(response)
-    logging.info(response.choices[0].message.content)
+    #logging.info(response)
+    #logging.info(response.choices[0].message.content)
     files_data = json.loads(response.choices[0].message.content)
     #files_data = json.loads(response["choices"][0]["message"]["content"])
     logging.info(files_data)
@@ -129,9 +132,8 @@ if input_type == "Text":
     if st.button("Generate BPMN"):
         if user_input:
             files = generate_bpmn(st, user_input)
-            print(files)
-            test="""
-<?xml version="1.0" encoding="UTF-8"?>
+            #print(files)
+            test="""<?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
   <collaboration id="sid-c0e745ff-361e-4afb-8c8d-2a1fc32b1424">
     <participant id="sid-87F4C1D6-25E1-4A45-9DA7-AD945993D06F" name="Customer" processRef="sid-C3803939-0872-457F-8336-EAE484DC4A04" />
@@ -285,7 +287,7 @@ if input_type == "Text":
             {html_code}
             <script>
               setTimeout(function() {{
-                 renderBPMN('{test}');
+                 renderBPMN(`{test}`);
               }}, 500);
             </script>
             """
