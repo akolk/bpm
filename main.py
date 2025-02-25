@@ -193,7 +193,8 @@ if input_type == "Text":
             """
             st.components.v1.html(dia_code, height=550)
             for file_name, file_content in files.items():
-                st.download_button(file_name, file_content, file_name, "text/xml")
+                if file_content != None:
+                   st.download_button(file_name, file_content, file_name, "text/xml")
             #st.components.v1.html(dia_code, height=550)
         else:
             st.warning("Geef een beschrijving van het proces.")
