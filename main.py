@@ -285,10 +285,11 @@ if input_type == "Text":
             {html_code}
             <script>
               setTimeout(function() {{
-                 renderBPMN(`{test}`);
+                 renderBPMN('{test}');
               }}, 500);
             </script>
             """
+            logging.info(dia_code)
             st.components.v1.html(dia_code, height=550)
             for file_name, file_content in files.items():
                 if file_content != None:
