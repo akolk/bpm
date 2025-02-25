@@ -34,19 +34,14 @@ html_code = """
 <body>
     <div id="canvas"></div>
     <script>
+        var viewer = new BpmnJS({ container: '#canvas' });  
         
-        function renderBPMN(xml) {
-            var viewer = new BpmnJS({ container: '#canvas' });
-            viewer.importXML(xml, function(err) {
-                if (err) {
-                    console.error("Could not import BPMN diagram:", err);
-                }
-            });
+        async function renderBPMN(xml) {
+            await viewer.importXML(xml) 
         }
         window.renderBPMN = renderBPMN;
     </script>
-</body>
-</html>
+
 """
 
 #<body>
@@ -284,10 +279,10 @@ if input_type == "Text":
             dia_code = f"""
             {html_code}
             <script>
-              setTimeout(function() {{
-                 renderBPMN(`{test}`);
-              }}, 500);
+               renderBPMN(`{test}`);
             </script>
+            </body>
+            </html>
             """
             logging.info(dia_code)
             st.components.v1.html(dia_code, height=550)
