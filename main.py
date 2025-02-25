@@ -34,16 +34,14 @@ html_code = """
 <body>
     <div id="canvas"></div>
     <script>
-        var viewer = new BpmnJS({ container: '#canvas' });
+        
         function renderBPMN(xml) {
+            var viewer = new BpmnJS({ container: '#canvas' });
             viewer.importXML(xml, function(err) {
                 if (err) {
                     console.error("Could not import BPMN diagram:", err);
                 }
             });
-            } catch(err) {
-                console.log(err
-              }
         }
         window.renderBPMN = renderBPMN;
     </script>
