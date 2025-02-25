@@ -326,7 +326,7 @@ elif input_type == "Spraak":
                     dia_code = f"""
                     {html_code}
                     <script>
-                    renderBPMN(`{test}`);
+                    renderBPMN(`{file_content}`);
                     </script>
                     </body>
                     </html>
