@@ -52,7 +52,7 @@ with col2:
                messages=[{"role": "user", "content": 
                    f"""
                    Je bent een BPMN specialist en je antwoord alleen in een JSON object.
-                   Maak een BPMN notatie en een BPMN 2.0 XML-formaat van het volgende proces: {text}
+                   Maak een BPMN notatie en een BPMN 2.0 XML-formaat van het volgende proces: {prompt}
                    """},
                   {"role": "user", "content": 
                    """
