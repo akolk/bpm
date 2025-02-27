@@ -166,6 +166,13 @@ html_code = """
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/bpmn-js/dist/bpmn-viewer.development.js"></script>
+        <!-- required modeler styles -->
+    <link rel="stylesheet" href="https://unpkg.com/bpmn-js@18.3.1/dist/assets/bpmn-js.css">
+    <link rel="stylesheet" href="https://unpkg.com/bpmn-js@18.3.1/dist/assets/diagram-js.css">
+    <link rel="stylesheet" href="https://unpkg.com/bpmn-js@18.3.1/dist/assets/bpmn-font/css/bpmn.css">
+
+    <!-- modeler distro -->
+    <!-- <script src="https://unpkg.com/bpmn-js@18.3.1/dist/bpmn-modeler.development.js"></script> -->
     <style>
         html, body {
             margin: 0;
