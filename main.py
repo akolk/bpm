@@ -43,6 +43,20 @@ html_code = """
     <script>
         var viewer = new BpmnJS({ container: '#canvas' });  
         
+        async function exportDiagram() {
+
+        try {
+
+          var result = await bpmnModeler.saveXML({ format: true });
+
+          alert('Diagram exported. Check the developer tools!');
+
+          console.log('DIAGRAM', result.xml);
+        } catch (err) {
+
+          console.error('could not save BPMN 2.0 diagram', err);
+        }
+      }
         async function renderBPMN(xml) {
             await viewer.importXML(xml) 
         }
