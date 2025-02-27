@@ -44,19 +44,15 @@ html_code = """
         var viewer = new BpmnJS({ container: '#canvas' });  
         
         async function exportDiagram() {
-
-        try {
-
-          var result = await bpmnModeler.saveXML({ format: true });
-
-          alert('Diagram exported. Check the developer tools!');
-
-          console.log('DIAGRAM', result.xml);
-        } catch (err) {
-
-          console.error('could not save BPMN 2.0 diagram', err);
+            try {
+               var result = await viewer.saveXML({ format: true });
+               alert('Diagram exported. Check the developer tools!');
+               console.log('DIAGRAM', result.xml);
+            } catch (err) {
+               console.error('could not save BPMN 2.0 diagram', err);
+            }
         }
-      }
+        
         async function renderBPMN(xml) {
             await viewer.importXML(xml) 
         }
@@ -64,20 +60,6 @@ html_code = """
     </script>
 
 """
-
-#<body>
-#    <div id="bpmn-container" style="width: 100%; height: 500px; border: 1px solid #ccc;"></div>
-#    <script>
-#        const viewer = new BpmnJS({ container: "#bpmn-container" });        
-#    </script>
-#</body>
-
-#fetch("https://cdn.jsdelivr.net/gh/bpmn-io/bpmn-js-examples@master/starter/diagram.bpmn")
-#            .then(response => response.text())
-#            .then(diagramXML => viewer.importXML(diagramXML))
-#            .catch(err => console.log(err));
-
-#st.components.v1.html(html_code)
 
 def transcribe_audio(file_path):
     recognizer = sr.Recognizer()
