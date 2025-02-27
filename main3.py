@@ -1,6 +1,5 @@
 import streamlit as st
 import openai
-import os
 
 # Streamlit Page Configuration
 st.set_page_config(layout="wide")
@@ -42,12 +41,12 @@ with col2:
             st.markdown(prompt)
         
         # OpenAI API Call
-        openai.api_key = os.getenv("OPENAI_KEY")
+        #openai.api_key = os.getenv("OPENAI_KEY")
         messages_payload = [{"role": msg["role"], "content": msg["content"]} for msg in st.session_state.messages]
         messages_payload.insert(0, {"role": "system", "content": f"File Content: {st.session_state.file_content}"})
         
         response = openai.ChatCompletion.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=messages_payload
         )
 
