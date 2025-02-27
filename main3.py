@@ -1,6 +1,7 @@
 import streamlit as st
 import openai
 
+client = openai.OpenAI()
 # Streamlit Page Configuration
 st.set_page_config(layout="wide")
 
