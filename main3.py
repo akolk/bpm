@@ -44,11 +44,32 @@ with col2:
         #openai.api_key = os.getenv("OPENAI_KEY")
         messages_payload = [{"role": msg["role"], "content": msg["content"]} for msg in st.session_state.messages]
         messages_payload.insert(0, {"role": "system", "content": f"File Content: {st.session_state.file_content}"})
-        
-        response = openai.ChatCompletion.create(
-            model="gpt-4o-mini",
-            messages=messages_payload
+
+        response = client.chat.completions.create(
+               model="gpt-4o-mini",    #"gpt-4-1106-preview",      # gpt-4
+               response_format= { "type": "json_object" },
+               messages=[{"role": "user", "content": 
+                   f"""
+                   Je bent een BPMN specialist en je antwoord alleen in een JSON object.
+                   Maak een BPMN notatie en een BPMN 2.0 XML-formaat van het volgende proces: {text}
+                   """},
+                  {"role": "user", "content": 
+                   """
+                   Geef een JSON object terug met de volgende velden:
+                   {
+                     "diagram.bpmn": "De diagram in Blue Dolphin compatible XML.",
+                     "annotatie.md": "De BPMN annotatie van het process in markdown formaat.",
+                     "proces_beschrijving.md": "De formele beschrijving van het proces in markdown formaat.",
+                     "bot_reply": "Wat heb je gedaan"
+                   }
+                   """}
+                 ]
         )
+        
+        #response = openai.ChatCompletion.create(
+        #    model="gpt-4o-mini",
+        #    messages=messages_payload
+        #)
 
         bot_reply = response.choices[0].message["content"]
         st.session_state.messages.append({"role": "assistant", "content": bot_reply})
