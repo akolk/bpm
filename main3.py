@@ -9,14 +9,17 @@ st.set_page_config(layout="wide")
 # Sidebar for File Upload
 st.sidebar.title("Upload File")
 uploaded_file = st.sidebar.file_uploader("Choose a file", type=["bpmn", "txt", "doc"])
-if filename.lower().endswith(".bpmn"):
+if uploaded_file.name.lower().endswith(".bpmn"):
     st.session_state.file_type = "bpmn" 
 
 if uploaded_file:
     file_content = uploaded_file.read().decode("utf-8")
     #if 'file_content' not in st.session_state:
     st.session_state.file_content = file_content
-    st.session_state.file_type = "bpmn" 
+    if uploaded_file.name.lower().endswith(".bpmn"):
+       st.session_state.file_type = "bpmn" 
+    else:
+       st.session_state.file_type = ""
 
 # Chat Interface
 st.title("Chat with your BPMN File using GPT-4o")
