@@ -60,7 +60,6 @@ with col2:
         messages_payload = [{"role": msg["role"], "content": msg["content"]} for msg in st.session_state.messages]
         messages_payload.insert(0, {"role": "system", "content": f"File Content: {st.session_state.file_content}"})
 
-        if st.session_state.messages.
         response = client.chat.completions.create(
                model="gpt-4o-mini",    #"gpt-4-1106-preview",      # gpt-4
                response_format= { "type": "json_object" },
