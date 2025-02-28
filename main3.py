@@ -86,7 +86,7 @@ with col2:
         #    messages=messages_payload
         #)
 
-        bot_reply = json.loads(response.choices[0].message["content"])
+        bot_reply = json.loads(response.choices[0].message.content)
         #files_data = json.loads(response.choices[0].message.content)
         st.session_state.messages.append({"role": "assistant", "content": bot_reply['bot_reply']})
         if bot_reply['diagram.bpmn']:
