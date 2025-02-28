@@ -1,6 +1,7 @@
 import streamlit as st
 import openai
 import htmlcode
+import json
 
 client = openai.OpenAI()
 # Streamlit Page Configuration
@@ -47,7 +48,7 @@ with col2:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    prompt = st.chat_input("Type your message here...")
+    prompt = st.chat_input("Wat wil je veranderen aan de process diagram? ....")
 
     if prompt:
         st.session_state.messages.append({"role": "user", "content": prompt})
@@ -59,6 +60,7 @@ with col2:
         messages_payload = [{"role": msg["role"], "content": msg["content"]} for msg in st.session_state.messages]
         messages_payload.insert(0, {"role": "system", "content": f"File Content: {st.session_state.file_content}"})
 
+        if st.session_state.messages.
         response = client.chat.completions.create(
                model="gpt-4o-mini",    #"gpt-4-1106-preview",      # gpt-4
                response_format= { "type": "json_object" },
@@ -85,7 +87,10 @@ with col2:
         #    messages=messages_payload
         #)
 
-        bot_reply = response.choices[0].message["content"]
-        st.session_state.messages.append({"role": "assistant", "content": bot_reply})
+        bot_reply = json.loads(response.choices[0].message["content"])
+        #files_data = json.loads(response.choices[0].message.content)
+        st.session_state.messages.append({"role": "assistant", "content": bot_reply['bot_reply'})
+        if bot_reply['diagram.bpmn']:
+          st.session_state.file_content = bot_reply['diagram.bpmn']
         with st.chat_message("assistant"):
-            st.markdown(bot_reply)
+            st.markdown(bot_reply['bot_reply'])
