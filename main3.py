@@ -28,6 +28,10 @@ with col2:
     st.subheader("Chat Interface")
     if 'messages' not in st.session_state:
         st.session_state.messages = []
+    if 'file_content' not in st.session_state:
+        st.session_state.file_content = ""
+    if 'file_type' not in st.session_state:
+        st.session_state.file_type = ""
 
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
@@ -83,6 +87,12 @@ with col2:
             st.markdown(bot_reply['bot_reply'])
 
 with col1:
+    if 'messages' not in st.session_state:
+        st.session_state.messages = []
+    if 'file_content' not in st.session_state:
+        st.session_state.file_content = ""
+    if 'file_type' not in st.session_state:
+        st.session_state.file_type = ""
     st.subheader("BPMN Modeller View")
     print(st.session_state)
     if 'file_type' in st.session_state and st.session_state.file_type == "bpmn":
