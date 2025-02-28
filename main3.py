@@ -15,8 +15,8 @@ if filename.lower().endswith(".bpmn"):
 if uploaded_file:
     file_content = uploaded_file.read().decode("utf-8")
     #if 'file_content' not in st.session_state:
-   st.session_state.file_content = file_content
-   st.session_state.file_type = "bpmn" 
+    st.session_state.file_content = file_content
+    st.session_state.file_type = "bpmn" 
 
 # Chat Interface
 st.title("Chat with your BPMN File using GPT-4o")
