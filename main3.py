@@ -94,5 +94,14 @@ with col2:
         if bot_reply['diagram.bpmn']:
           st.session_state.file_content = bot_reply['diagram.bpmn']
           st.session_state.file_type = "bpmn"
+          modeller_code = f"""
+                    {htmlcode.html_code}
+                    <script>
+                    renderBPMN(`{st.session_state.file_content}`);
+                    </script>
+                    </body>
+                    </html>
+                    """
+          st.components.v1.html(modeller_code, height=400)
         with st.chat_message("assistant"):
             st.markdown(bot_reply['bot_reply'])
