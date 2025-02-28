@@ -26,7 +26,7 @@ col1, col2 = st.columns([3, 1])
 
 with col1:
     st.subheader("BPMN Modeller View")
-    if uploaded_file and st.session_state.file_type == "bpmn":
+    if 'file_type' in st.session_state and st.session_state.file_type == "bpmn":
         modeller_code = f"""
                     {htmlcode.html_code}
                     <script>
@@ -91,5 +91,6 @@ with col2:
         st.session_state.messages.append({"role": "assistant", "content": bot_reply['bot_reply']})
         if bot_reply['diagram.bpmn']:
           st.session_state.file_content = bot_reply['diagram.bpmn']
+          st.session_state.file_type = "bpmn"
         with st.chat_message("assistant"):
             st.markdown(bot_reply['bot_reply'])
