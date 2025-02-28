@@ -21,7 +21,7 @@ if uploaded_file:
 
 # Chat Interface
 st.title("Chat with your BPMN File using GPT-4o")
-col1, col2 = st.columns([1, 1])
+col1, col2 = st.columns([3, 1])
 
 with col1:
     st.subheader("BPMN Modeller View")
