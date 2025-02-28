@@ -1,6 +1,6 @@
 import streamlit as st
 import openai
-import html 
+import htmlcode
 
 client = openai.OpenAI()
 # Streamlit Page Configuration
@@ -27,7 +27,7 @@ with col1:
     st.subheader("BPMN Modeller View")
     if uploaded_file and st.session_state.file_type == "bpmn":
         modeller_code = f"""
-                    {html.html_code}
+                    {htmlcode.html_code}
                     <script>
                     renderBPMN(`{st.session_state.file_content}`);
                     </script>
