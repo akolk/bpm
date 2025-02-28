@@ -24,22 +24,6 @@ if uploaded_file:
 st.title("Chat with your BPMN File using GPT-4o")
 col1, col2 = st.columns([3, 1])
 
-with col1:
-    st.subheader("BPMN Modeller View")
-    print(st.session_state)
-    if 'file_type' in st.session_state and st.session_state.file_type == "bpmn":
-        modeller_code = f"""
-                    {htmlcode.html_code}
-                    <script>
-                    renderBPMN(`{st.session_state.file_content}`);
-                    </script>
-                    </body>
-                    </html>
-                    """
-        st.components.v1.html(modeller_code, height=400)
-    else:
-        st.info("Upload a BPMN file to start.")
-
 with col2:
     st.subheader("Chat Interface")
     if 'messages' not in st.session_state:
@@ -94,7 +78,15 @@ with col2:
         if bot_reply['diagram.bpmn']:
           st.session_state.file_content = bot_reply['diagram.bpmn']
           st.session_state.file_type = "bpmn"
-          modeller_code = f"""
+            
+        with st.chat_message("assistant"):
+            st.markdown(bot_reply['bot_reply'])
+
+with col1:
+    st.subheader("BPMN Modeller View")
+    print(st.session_state)
+    if 'file_type' in st.session_state and st.session_state.file_type == "bpmn":
+        modeller_code = f"""
                     {htmlcode.html_code}
                     <script>
                     renderBPMN(`{st.session_state.file_content}`);
@@ -102,6 +94,6 @@ with col2:
                     </body>
                     </html>
                     """
-          st.components.v1.html(modeller_code, height=400)
-        with st.chat_message("assistant"):
-            st.markdown(bot_reply['bot_reply'])
+        st.components.v1.html(modeller_code, height=400)
+    else:
+        st.info("Upload a BPMN file to start.")
