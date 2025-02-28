@@ -26,6 +26,7 @@ col1, col2 = st.columns([3, 1])
 
 with col1:
     st.subheader("BPMN Modeller View")
+    print(st.session_state)
     if 'file_type' in st.session_state and st.session_state.file_type == "bpmn":
         modeller_code = f"""
                     {htmlcode.html_code}
