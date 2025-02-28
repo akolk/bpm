@@ -94,6 +94,7 @@ with col1:
                     </body>
                     </html>
                     """
+        print(modeller_code)
         st.components.v1.html(modeller_code, height=400)
     else:
         st.info("Upload a BPMN file to start.")
