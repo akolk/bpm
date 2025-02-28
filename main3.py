@@ -89,7 +89,7 @@ with col2:
 
         bot_reply = json.loads(response.choices[0].message["content"])
         #files_data = json.loads(response.choices[0].message.content)
-        st.session_state.messages.append({"role": "assistant", "content": bot_reply['bot_reply'})
+        st.session_state.messages.append({"role": "assistant", "content": bot_reply['bot_reply'])
         if bot_reply['diagram.bpmn']:
           st.session_state.file_content = bot_reply['diagram.bpmn']
         with st.chat_message("assistant"):
