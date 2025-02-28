@@ -1,5 +1,6 @@
 import streamlit as st
 import openai
+import html 
 
 client = openai.OpenAI()
 # Streamlit Page Configuration
@@ -7,12 +8,15 @@ st.set_page_config(layout="wide")
 
 # Sidebar for File Upload
 st.sidebar.title("Upload File")
-uploaded_file = st.sidebar.file_uploader("Choose a file", type=["bpmn"])
+uploaded_file = st.sidebar.file_uploader("Choose a file", type=["bpmn", "txt", "doc"])
+if filename.lower().endswith(".bpmn"):
+    st.session_state.file_type = "bpmn" 
 
 if uploaded_file:
     file_content = uploaded_file.read().decode("utf-8")
-    if 'file_content' not in st.session_state:
-        st.session_state.file_content = file_content
+    #if 'file_content' not in st.session_state:
+   st.session_state.file_content = file_content
+   st.session_state.file_type = "bpmn" 
 
 # Chat Interface
 st.title("Chat with your BPMN File using GPT-4o")
@@ -21,7 +25,15 @@ col1, col2 = st.columns([1, 1])
 with col1:
     st.subheader("BPMN Modeller View")
     if uploaded_file:
-        st.components.v1.html(f"<pre>{st.session_state.file_content}</pre>", height=400)
+        modeller_code = f"""
+                    {html.html_code}
+                    <script>
+                    renderBPMN(`{st.session_state.file_content}`);
+                    </script>
+                    </body>
+                    </html>
+                    """
+        st.components.v1.html(modeller_code, height=400)
     else:
         st.info("Upload a BPMN file to start.")
 
