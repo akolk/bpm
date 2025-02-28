@@ -27,7 +27,7 @@ col1, col2 = st.columns([1, 1])
 
 with col1:
     st.subheader("BPMN Modeller View")
-    if uploaded_file:
+    if uploaded_file and st.session_state.file_type == "bpmn":
         modeller_code = f"""
                     {html.html_code}
                     <script>
