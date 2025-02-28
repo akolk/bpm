@@ -57,8 +57,8 @@ with col2:
         
         # OpenAI API Call
         #openai.api_key = os.getenv("OPENAI_KEY")
-        messages_payload = [{"role": msg["role"], "content": msg["content"]} for msg in st.session_state.messages]
-        messages_payload.insert(0, {"role": "system", "content": f"File Content: {st.session_state.file_content}"})
+        #messages_payload = [{"role": msg["role"], "content": msg["content"]} for msg in st.session_state.messages]
+        #messages_payload.insert(0, {"role": "system", "content": f"File Content: {st.session_state.file_content}"})
 
         response = client.chat.completions.create(
                model="gpt-4o-mini",    #"gpt-4-1106-preview",      # gpt-4
