@@ -1,5 +1,5 @@
 # Use official Python base image
-FROM python:3.14
+FROM python:3.15
 
 RUN apt-get update && apt-get install -y libasound-dev libportaudio2 libportaudiocpp0 portaudio19-dev -y
 # Set the working directory
